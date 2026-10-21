@@ -27,14 +27,14 @@ const seedDatabase = async () => {
 
     const adminUser = await User.create({
       name: "Super Admin",
-      email: process.env.ADMIN_EMAIL || "admin@coursemaster.com",
+      email: process.env.ADMIN_EMAIL || "admincoursemaster@gmail.com",
       passwordHash: hashedPassword,
       role: "admin",
     });
 
     const student1 = await User.create({
       name: "Rahim Chowdhury",
-      email: "student@coursemaster.com",
+      email: "studentcoursemaster@gmail.com",
       passwordHash: studentPassword,
       role: "student",
     });
