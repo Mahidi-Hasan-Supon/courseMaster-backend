@@ -22,10 +22,14 @@ const login = async (req, res) => {
 
 const me = async (req, res) => {
   try {
+      console.log("JWT user:", req.user);
+    // console.log("MongoDB:", User.db.name);
+    // console.log("Collection:", User.collection.name);
     const user = await authService.getMe(req.user.id);
     res.json(user);
   } catch (err) {
     res.status(404).json({ message: err.message });
+     console.error("GET /me error:", err.message);
   }
 };
 
