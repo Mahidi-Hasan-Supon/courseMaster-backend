@@ -1,408 +1,329 @@
-# CourseMaster - Backend API
+# 🚀 CourseMaster Backend — Online Learning Platform API
 
-A RESTful API for the CourseMaster E-learning platform built with Node.js, Express, and MongoDB.
+The backend API for **CourseMaster**, an online learning platform built with Node.js, Express.js, and MongoDB. It provides API endpoints for authentication, course management, student learning activities, and administrative operations.
 
-Video Link: https://drive.google.com/file/d/1vjMrBxr0-7xqjxMX2EBEBw30D_av1pOu/view
+🔗 **Live Backend:** https://course-master-backend-nu.vercel.app/  
+🔗 **Frontend Application:** https://course-master-front-end-ten.vercel.app/
 
-Admin email: admin@coursemaster.com
-Pass: admin123
+---
 
-## Project Name & Description
+## 📌 Table of Contents
 
-**CourseMaster Backend** provides a comprehensive RESTful API for managing an E-learning platform. It handles authentication, course management, enrollments, assignments, quizzes, and administrative operations. The backend is built with Node.js and Express.js, using MongoDB for data storage and JWT for authentication.
+- [Overview](#-overview)
+- [Features](#-features)
+- [Technology Stack](#-technology-stack)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Environment Variables](#-environment-variables)
+- [API Endpoints](#-api-endpoints)
+- [Running the Project](#-running-the-project)
+- [Deployment](#-deployment)
+- [Security Notes](#-security-notes)
+- [Author](#-author)
+- [License](#-license)
 
-## Technology Stack
+---
 
-- **Node.js** - Runtime environment
-- **Express.js 5** - Web framework
-- **MongoDB** - Database
-- **Mongoose** - ODM
-- **JWT** - Authentication
-- **bcrypt** - Password hashing
-- **Zod** - Input validation
+## 🎯 Overview
 
-## Installation
+CourseMaster Backend is a REST API that powers the CourseMaster frontend. It handles incoming requests, communicates with MongoDB, and returns JSON responses to the client.
 
-1. Clone the repository
-2. Navigate to the backend directory:
-   ```bash
-   cd courseMaster_Backend
-   ```
+The backend is designed to support course discovery, authentication, student enrollment, assignments, quizzes, and administrative course management.
 
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
+---
 
-4. Create a `.env` file in the root directory (see `.env.example`)
+## ✨ Features
 
-5. Start the development server:
-   ```bash
-   npm run dev
-   ```
+### 🔐 Authentication
 
-6. Start the production server:
-   ```bash
-   npm start
-   ```
+- User registration and login
+- Password hashing and verification
+- Token-based authentication
+- Protected API routes
+- Authentication-related request validation
 
-## Environment Variables
+### 📚 Course Management
 
-Create a `.env` file in the root directory with the following variables (see `.env.example` for reference):
+- Retrieve available courses
+- Retrieve course information
+- Create and manage courses through administrative functionality
+- Support course-related frontend operations
+
+### 👨‍🎓 Student Learning
+
+- Enrollment-related operations
+- Assignment-related endpoints
+- Quiz-related endpoints
+- User-related operations
+- Support for student learning workflows
+
+### 🛠️ Administration
+
+- Administrative routes
+- Course management
+- User management
+- Enrollment management
+
+### 🌐 API & Deployment
+
+- Express.js REST API
+- MongoDB database integration with Mongoose
+- Environment-based configuration
+- CORS configuration for frontend integration
+- Vercel deployment support
+
+*The availability and exact behavior of individual features depend on the implementation of their corresponding routes and controllers.*
+
+---
+
+## 🧰 Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Node.js | JavaScript runtime |
+| Express.js | Backend web framework |
+| MongoDB | Database |
+| Mongoose | MongoDB object modeling |
+| JSON Web Token (JWT) | Token-based authentication |
+| bcrypt | Password hashing |
+| Zod | Request validation |
+| Nodemailer | Email functionality |
+| dotenv | Environment variable management |
+| Vercel | Backend deployment |
+
+---
+
+## 📁 Project Structure
+
+```text
+courseMaster_Backend/
+├── api/
+│   └── index.js
+├── src/
+│   ├── config/
+│   │   └── db.js
+│   ├── middlewares/
+│   ├── routes/
+│   │   ├── auth.routes.js
+│   │   ├── course.routes.js
+│   │   ├── admin.routes.js
+│   │   ├── enrollment.routes.js
+│   │   ├── assignment.routes.js
+│   │   ├── quiz.routes.js
+│   │   └── user.routes.js
+│   └── controllers/
+├── app.js
+├── server.js
+├── seed.js
+├── package.json
+├── vercel.json
+├── .env.example
+└── README.md
+```
+
+*Adjust the structure above to match the actual files in your repository.*
+
+---
+
+## ⚙️ Getting Started
+
+### Prerequisites
+
+Install the following before running the project:
+
+- [Node.js](https://nodejs.org/)
+- npm
+- [MongoDB](https://www.mongodb.com/)
+- Git
+
+### 1. Clone the Repository
+
+```bash
+git clone YOUR_BACKEND_GITHUB_REPOSITORY_URL
+```
+
+Navigate into the project directory:
+
+```bash
+cd courseMaster_Backend
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file in the project root:
 
 ```env
-# Server Configuration
 PORT=5000
-
-# Database
-MONGODB_URI=mongodb://localhost:27017/coursemaster
-
-# JWT Secret
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-
-# Admin Registration Key (Optional - for admin account creation)
-ADMIN_REGISTRATION_KEY=your-secret-admin-key-here
-
-# Node Environment
-NODE_ENV=development
-
-# Email Configuration (Optional - for welcome emails)
-EMAIL_SERVICE=gmail
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASSWORD=your-app-password
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_strong_random_secret
 FRONTEND_URL=http://localhost:5173
 ```
 
-**Required Variables:**
-- `PORT` - Server port (default: 5000)
-- `MONGODB_URI` - MongoDB connection string (required)
-- `JWT_SECRET` - Secret key for JWT token generation (required)
+Use the actual environment variable names required by your implementation. Never commit real credentials to GitHub.
 
-**Optional Variables:**
-- `NODE_ENV` - Environment mode (development/production)
-- `ADMIN_REGISTRATION_KEY` - Secret key for admin account registration (optional)
-  - If set, users can register as admin by providing this key during registration
-  - If not set, admin registration via key is disabled
-  - Admins can still be created manually in the database
-- `EMAIL_SERVICE` - Email service provider (gmail, smtp, etc.)
-- `EMAIL_USER` - Email address for sending welcome emails
-- `EMAIL_PASSWORD` - Email password or app password
-- `FRONTEND_URL` - Frontend URL for email links
+### 4. Start the Development Server
 
-**Note for Email Setup:**
-- For Gmail, you need to:
-  1. Enable 2-Factor Authentication
-  2. Generate an App Password (not your regular password)
-  3. Use the App Password in `EMAIL_PASSWORD`
-- If email is not configured, the app will still work but won't send welcome emails
-
-## API Documentation
-
-Base URL: `http://localhost:5000/api/api`
-
-### Authentication Endpoints
-
-#### Register
-- **POST** `/api/auth/register`
-- **Body:**
-  ```json
-  {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "password123",
-    "adminKey": "optional-admin-key" 
-  }
-  ```
-- **Response:** User object with token
-- **Note:** 
-  - By default, users are registered as "student"
-  - To register as "admin", provide a valid `adminKey` that matches `ADMIN_REGISTRATION_KEY` in environment variables
-  - If invalid admin key is provided, registration will fail
-
-#### Login
-- **POST** `/api/auth/login`
-- **Body:**
-  ```json
-  {
-    "email": "john@example.com",
-    "password": "password123"
-  }
-  ```
-- **Response:** User object with token
-
-#### Get Current User
-- **GET** `/api/auth/me`
-- **Headers:** `Authorization: Bearer <token>`
-- **Response:** User object
-
-### Course Endpoints (Public)
-
-#### Get All Courses
-- **GET** `/api/courses`
-- **Query Parameters:**
-  - `page` - Page number (default: 1)
-  - `limit` - Items per page (default: 8)
-  - `search` - Search by title or instructor
-  - `sort` - Sort by price: `price_asc` or `price_desc`
-  - `category` - Filter by category
-  - `tags` - Filter by tags (comma-separated)
-- **Response:** Paginated courses list
-
-#### Get Course by ID
-- **GET** `/api/courses/:id`
-- **Response:** Course object with full details
-
-### Enrollment Endpoints (Protected - Student)
-
-#### Enroll in Course
-- **POST** `/api/enrollments/:courseId`
-- **Headers:** `Authorization: Bearer <token>`
-- **Body (optional):**
-  ```json
-  {
-    "batchId": "batch-id-here"
-  }
-  ```
-- **Response:** Enrollment object
-
-#### Get My Enrollments
-- **GET** `/api/enrollments/my`
-- **Headers:** `Authorization: Bearer <token>`
-- **Response:** Array of enrollment objects
-
-#### Mark Lesson as Complete
-- **PATCH** `/api/enrollments/:enrollId/complete-lesson`
-- **Headers:** `Authorization: Bearer <token>`
-- **Body:**
-  ```json
-  {
-    "lessonId": "lesson-id-here"
-  }
-  ```
-- **Response:** Updated enrollment object
-
-### Assignment Endpoints (Protected - Student)
-
-#### Submit Assignment
-- **POST** `/api/assignments/submit`
-- **Headers:** `Authorization: Bearer <token>`
-- **Body:**
-  ```json
-  {
-    "courseId": "course-id",
-    "lessonId": "lesson-id",
-    "answer": "Answer text or Google Drive link",
-    "answerType": "text" // or "link"
-  }
-  ```
-- **Response:** Assignment submission object
-
-#### Get My Submissions
-- **GET** `/api/assignments/my`
-- **Headers:** `Authorization: Bearer <token>`
-- **Response:** Array of assignment submissions
-
-### Quiz Endpoints (Protected - Student)
-
-#### Submit Quiz
-- **POST** `/api/quizzes/submit`
-- **Headers:** `Authorization: Bearer <token>`
-- **Body:**
-  ```json
-  {
-    "courseId": "course-id",
-    "lessonId": "lesson-id",
-    "answers": [0, 1, 2, 0] // Array of selected option indices
-  }
-  ```
-- **Response:**
-  ```json
-  {
-    "total": 4,
-    "score": 3,
-    "percent": 75
-  }
-  ```
-
-### Admin Endpoints (Protected - Admin Only)
-
-#### Create Course
-- **POST** `/api/admin/courses`
-- **Headers:** `Authorization: Bearer <token>`
-- **Body:** See Course Schema below
-- **Response:** Created course object
-
-#### Update Course
-- **PATCH** `/api/admin/courses/:id`
-- **Headers:** `Authorization: Bearer <token>`
-- **Body:** Course fields to update
-- **Response:** Updated course object
-
-#### Delete Course
-- **DELETE** `/api/admin/courses/:id`
-- **Headers:** `Authorization: Bearer <token>`
-- **Response:** Success message
-
-#### Get All Enrollments
-- **GET** `/api/admin/enrollments`
-- **Headers:** `Authorization: Bearer <token>`
-- **Query Parameters:**
-  - `courseId` - Filter by course
-  - `batchId` - Filter by batch
-- **Response:** Array of enrollment objects
-
-#### Get All Assignments
-- **GET** `/api/admin/assignments`
-- **Headers:** `Authorization: Bearer <token>`
-- **Response:** Array of assignment submissions
-
-#### Get Analytics
-- **GET** `/api/admin/analytics`
-- **Headers:** `Authorization: Bearer <token>` (Admin only)
-- **Response:** Analytics data including:
-  - Chart data for enrollments over last 30 days
-  - Top courses by enrollments
-  - Platform statistics (total enrollments, courses, students, instructors)
-
-#### Review Assignment
-- **PATCH** `/api/admin/assignments/:id/review`
-- **Headers:** `Authorization: Bearer <token>`
-- **Body:**
-  ```json
-  {
-    "status": "reviewed",
-    "reviewNotes": "Great work!",
-    "grade": 95
-  }
-  ```
-- **Response:** Updated assignment submission
-
-## Data Models
-
-### Course Schema
-```javascript
-{
-  title: String (required, indexed),
-  description: String (required),
-  instructorName: String (required, indexed),
-  price: Number (required),
-  category: String (indexed),
-  tags: [String] (indexed),
-  syllabus: [{
-    title: String (required),
-    lessons: [{
-      title: String (required),
-      videoUrl: String (required),
-      assignmentPrompt: String,
-      quiz: [{
-        question: String,
-        options: [String],
-        correctIndex: Number
-      }]
-    }]
-  }],
-  batches: [{
-    name: String,
-    startDate: Date
-  }]
-}
+```bash
+npm run dev
 ```
 
-### User Schema
-```javascript
-{
-  name: String (required),
-  email: String (required, unique),
-  passwordHash: String (required),
-  role: String (enum: ["student", "admin"], default: "student")
-}
+If your `package.json` defines the `dev` script using Nodemon, the server will restart automatically when source files change.
+
+### 5. Start the Production Server Locally
+
+```bash
+npm start
 ```
 
-### Enrollment Schema
-```javascript
-{
-  student: ObjectId (ref: User),
-  course: ObjectId (ref: Course),
-  batchId: ObjectId,
-  progress: {
-    completedLessons: [ObjectId],
-    percent: Number (default: 0)
-  }
-}
+The API will use the configured port, typically `5000` for local development.
+
+---
+
+## 🔑 Environment Variables
+
+| Variable | Description |
+|---|---|
+| `PORT` | Port used by the local Express server |
+| `MONGODB_URI` | MongoDB connection string |
+| `MONGO_URI` | Alternative MongoDB connection variable, if supported by the database configuration |
+| `JWT_SECRET` | Secret used to sign and verify JWTs |
+| `FRONTEND_URL` | Allowed frontend origin or comma-separated frontend origins |
+
+Your database configuration supports `MONGODB_URI` or `MONGO_URI`. Set the variable that matches your deployment environment.
+
+**Important:** Keep `.env` out of version control. Configure production secrets through Vercel's Environment Variables settings.
+
+---
+
+## 🔌 API Endpoints
+
+The following route prefixes are registered by the application:
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/` | Backend health check |
+| `/api/auth` | Authentication routes | Registration and login-related operations |
+| `/api/courses` | Course routes | Course-related operations |
+| `/api/admin` | Admin routes | Administrative operations |
+| `/api/enrollments` | Enrollment routes | Enrollment-related operations |
+| `/api/assignments` | Assignment routes | Assignment-related operations |
+| `/api/quizzes` | Quiz routes | Quiz-related operations |
+| `/api/users` | User routes | User-related operations |
+
+The HTTP methods and specific paths available under each prefix are defined by the corresponding route files.
+
+### Example: Check the API
+
+Open the deployed health-check endpoint:
+
+```text
+https://course-master-backend-nu.vercel.app/
 ```
 
-## Error Handling
+Expected response:
 
-All errors follow this format:
-```json
-{
-  "message": "Error message here"
-}
+```text
+Course Master Backend Running ✅
 ```
 
-Common HTTP Status Codes:
-- `200` - Success
-- `201` - Created
-- `400` - Bad Request
-- `401` - Unauthorized
-- `403` - Forbidden
-- `404` - Not Found
-- `500` - Internal Server Error
+### Example: Retrieve Courses
 
-## Bonus Features
+```http
+GET /api/courses
+```
 
-### Email Notifications
-- Welcome emails are automatically sent to new users upon registration
-- Uses Nodemailer for email delivery
-- Configure email settings in `.env` file
-- Email sending is non-blocking (won't fail registration if email fails)
+The courses endpoint also supports pagination parameters used by the frontend, for example:
 
-### Analytics Dashboard
-- Admin analytics dashboard with enrollment trends
-- Charts showing enrollments over the last 30 days
-- Top courses by enrollment statistics
-- Platform-wide statistics (total enrollments, courses, students, instructors)
-- Accessible at `/admin/analytics` (admin only)
+```http
+GET /api/courses?page=1&limit=6
+```
 
-## Admin Registration
+The exact response structure depends on the endpoint implementation.
 
-Admins can be created in two ways:
+---
 
-1. **Registration Key Method (Recommended)**:
-   - Set `ADMIN_REGISTRATION_KEY` in your `.env` file
-   - During registration, provide the admin key in the registration form
-   - If the key matches, the user will be created as "admin"
-   - If the key is invalid or missing, registration will fail or create a student account
+## 🧪 Running the Project
 
-2. **Manual Database Method**:
-   - Create admin users directly in the database
-   - Set the `role` field to "admin" in the User document
+Start the local development server:
 
-**Note**: If `ADMIN_REGISTRATION_KEY` is not set in `.env`, admin registration via key is disabled for security.
+```bash
+npm run dev
+```
 
-## Security Features
+Check the root endpoint:
 
-- Password hashing with bcrypt
-- JWT token-based authentication
-- Protected routes with middleware
-- Admin-only routes with role checking
-- Admin registration key protection
-- Input validation with Zod
-- CORS enabled
+```text
+http://localhost:5000/
+```
 
-## Database Indexing
+Check the courses endpoint:
 
-The following fields are indexed for performance:
-- Course: `title`, `instructorName`, `category`, `tags`
-- Enrollment: `{student: 1, course: 1}` (unique compound index)
+```text
+http://localhost:5000/api/courses
+```
 
-## Deployment
+Ensure MongoDB is reachable and the environment variables are configured correctly before testing API requests.
 
-The backend is deployed on **Vercel**. Make sure to set all environment variables in your deployment platform.
+---
 
-## Development
+## 🌐 Deployment on Vercel
 
-- Development server runs on `http://localhost:5000` (default)
-- Uses `nodemon` for auto-restart during development
-- MongoDB connection is handled via Mongoose
+CourseMaster Backend is deployed on Vercel.
 
+**Production URL:**  
+https://course-master-backend-nu.vercel.app/
+
+### Deployment Steps
+
+1. Push the backend repository to GitHub.
+2. Import the repository into Vercel.
+3. Configure the required production environment variables.
+4. Verify the MongoDB connection string and database access.
+5. Confirm that the deployment configuration uses `api/index.js` as the serverless entry point.
+6. Deploy the project and check the root endpoint.
+
+### Frontend CORS Configuration
+
+The deployed frontend origin is:
+
+```text
+https://course-master-front-end-ten.vercel.app
+```
+
+Configure `FRONTEND_URL` in Vercel to match the frontend origin. If the variable changes, redeploy the backend so the new configuration takes effect.
+
+---
+
+## 🔒 Security Notes
+
+- Never commit `.env` files or production secrets.
+- Use strong JWT secrets in production.
+- Hash passwords before storing them in the database.
+- Validate and sanitize incoming request data as appropriate.
+- Restrict protected routes to authorized users.
+- Configure CORS for trusted frontend origins.
+- Use secure authentication and authorization practices for administrative operations.
+
+---
+
+## 👨‍💻 Author
+
+**Mahidi Hasan Supon**
+
+- GitHub: [@Mahidi-Hasan-Supon](https://github.com/Mahidi-Hasan-Supon)
+
+---
+
+## 📄 License
+
+No license has been specified yet. Add a `LICENSE` file if you intend to distribute this project under an open-source license.
+
+---
+
+⭐ If you find this project useful, consider starring the repository!
