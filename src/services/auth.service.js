@@ -5,18 +5,42 @@ const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
 const { sendWelcomeEmail } = require("./email.service");
 
-const register = async ({ name, email, password, role, adminKey }) => {
-  const exists = await User.findOne({ email });
+const register = async ({ name, email, password, adminKey }) => {
+  const normalizedEmail = email.trim().toLowerCase();
+  const exists = await User.findOne({ email: normalizedEmail });
   if (exists) throw new Error("Email already registered");
+
+  const providedKey = typeof adminKey === "string"
+    ? adminKey.trim()
+    : "";
+
+  let role = "student";
+
+  if (providedKey) {
+    const configuredKey = process.env.ADMIN_REGISTRATION_KEY;
+
+    if (!configuredKey) {
+      throw new Error("Admin registration is not configured");
+    }
+
+    if (providedKey !== configuredKey) {
+      throw new Error("Invalid admin registration key");
+    }
+
+    role = "admin";
+  }
+
 
   const passwordHash = await bcrypt.hash(password, 10);
 
   // Code-12 bug: user can pass role directly in payload without adminKey verification
+  //solved
   const user = await User.create({
-    name,
-    email,
+    name: name.trim(),
+    email: normalizedEmail,
     passwordHash,
-    role: role || "student",
+    // role: role || "student",
+    role
   });
 
   const token = generateToken({ id: user._id, role: user.role });
@@ -28,7 +52,12 @@ const register = async ({ name, email, password, role, adminKey }) => {
 
   return {
     token,
-    user: { id: user._id, name: user.name, email: user.email, role: user.role },
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
   };
 };
 
@@ -38,7 +67,7 @@ const login = async ({ email, password }) => {
 
   // Code-5 bug: plaintext equality check instead of bcrypt.compare
   //solved
-  const match = await bcrypt.compare(password , user.passwordHash);
+  const match = await bcrypt.compare(password, user.passwordHash);
   // const match = (password === user.passwordHash);
   if (!match) throw new Error("Invalid email or password");
 
